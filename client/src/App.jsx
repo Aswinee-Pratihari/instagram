@@ -17,7 +17,15 @@ const App = () => {
             </HomeDesktopLayout>
           }
         />
-        <Route path="/:userId" element={<Profile />} />
+        <Route
+          path="/:userId"
+          element={
+            <HomeDesktopLayout>
+              {" "}
+              <Profile />
+            </HomeDesktopLayout>
+          }
+        />
         <Route path="/signIn" element={<SignIn />} />
       </Routes>
     </BrowserRouter>

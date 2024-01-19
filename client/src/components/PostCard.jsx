@@ -1,5 +1,6 @@
 import React from "react";
 import { BsThreeDots } from "react-icons/bs";
+import { Link } from "react-router-dom";
 import {
   FaHeart as LikedHeart,
   FaRegHeart as DislikedHeart,
@@ -15,7 +16,12 @@ const PostCard = ({ id, userName, postImg, userImg, caption }) => {
             <img src={userImg} />
           </div>
         </div>
-        <p className="flex-1 text-base font-bold">{userName}</p>
+        <Link
+          to={`/${id}`}
+          className="flex-1 text-base font-bold text-black cursor-pointer"
+        >
+          {userName}
+        </Link>
 
         <BsThreeDots />
       </div>
