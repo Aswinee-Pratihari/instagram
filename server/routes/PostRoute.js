@@ -3,27 +3,39 @@ import { TokenVerification } from "../middleware/TokenVerification.js";
 import Post from "../models/PostModel.js";
 import User from "../models/UserModel.js";
 import mongoose from "mongoose";
-import multer from "multer";
+import { upload } from "../middleware/multerUpload.js";
+import { fileUpload } from "../utils/cloudinary.js";
 
 const router = express.Router();
-
-//upload images
 
 router.post(
   "/",
 
   TokenVerification,
+  upload.single("postImg"),
   async (req, res) => {
     const { caption, userId = req.user._id } = req.body;
     if (!caption || !userId) {
       return res.status(404).json("Please fill up all fields");
     }
-    const post = { caption, userId };
+
+    const image = req.file;
+    // console.log(req?.file);
+    let postImage = await fileUpload(image?.path);
+
+    if (!postImage) {
+      res.status(502).json(" Image upload failed");
+    }
+    const post = { caption, userId, postImage };
+    //console.log(postImage);
+
     try {
       const createdPost = await Post.create(post);
       return res.status(200).json(createdPost);
+      // return res.status(200).json("done");
     } catch (error) {
-      res.status(503).json(error);
+      console.log(error);
+      res.status(500).json(error);
     }
   }
 );
